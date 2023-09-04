@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package sysclient;
+
+option go_package = "./sysclient";
+
+//user start---------------------
+message LoginReq {
+  string user_name = 1;
+  string password = 2;
+}
+
+message loginResp {
+  string status = 1;
+  int32 id = 2;
+  string userName = 3;
+  string AccessToken = 4;
+  int64 AccessExpire = 5;
+  int64 RefreshAfter = 6;
+}
+
+message InfoReq {
+  int32 UserId = 1;
+}
+
+message InfoResp {
+  string avatar = 1;
+  string name = 2;
+  string nickName = 3;
+  string email = 4;
+  string mobile = 5;
+  int64 createdAt = 6;
+  repeated AdminRole adminRole = 7;
+  repeated AdminPermission adminPermission = 8;
+}
+
+message AdminRole {
+  string Name = 1;
+  string Slug = 2;
+}
+
+message AdminPermission {
+  int32 Id = 1;
+  int32 ParentId = 2;
+  string Name = 3;
+  string Icon = 4;
+  string Rule = 5;
+  string Description = 6;
+}
+
+// 添加用户
+message UserAddReq {
+  string name = 1;
+  string nickName = 2;
+  string avatar = 3;
+  string password = 4;
+  string email = 5;
+  string mobile = 6;
+  int32  status = 7;
+}
+message UserAddResp {
+  string pong = 1;
+}
+
+// 删除用户
+message UserDelReq {
+  int32 id = 1;
+}
+message UserDelResp {
+  string pong = 1;
+}
+
+// 检查菜单权限
+message CheckPermissionReq {
+  int32 UserId = 1;
+  string Rule = 2; 
+}
+message CheckPermissionResp {
+  string pong = 1;
+}
+
+service Sys{
+  rpc CheckPermission(CheckPermissionReq) returns(CheckPermissionResp);
+  rpc Login(LoginReq) returns(loginResp);
+  rpc UserInfo(InfoReq) returns(InfoResp);
+  rpc AddUser(UserAddReq) returns(UserAddResp);
+  rpc DelUser(UserDelReq) returns(UserDelResp);
+}
